@@ -67,6 +67,13 @@ Executed on the local host after `run`.
 * library file must have a trailing newline (`line xx: syntax error: unexpected end of file`)
 * do not overwrite external commands with functions, add guard to check if command is defined
 
+## POSIX COMPLIANCE
+
+really hard stuff
+
+* try bashcritic from https://trac.id.ethz.ch/projects/bashcritic/
+* http://www.spinics.net/lists/dash/msg00537.html
+
 ##  TODO 
 
 * generate a UUID to identify the script execution

@@ -12,8 +12,6 @@ MODULE_CONTENT=`cat ${MODULE_FILE}`
 . $STDLIB_FILES
 . $MODULE_FILE
 
-type 'initialize'
-
 call_function_if_exists 'initialize'
 
 # call the modules's `run` function on the remote host

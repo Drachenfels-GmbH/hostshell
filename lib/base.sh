@@ -10,36 +10,45 @@ function function_exists? {
     type $1 | grep -q 'function'
 }
 
+# Slices the given string. Uses spaces as separator.
+# $1: range (see `man 5 cut`)
+# $2: input string
+function slice_string {
+  local str=$(cut -d ' ' -f2- <<< $@)
+  RET=$(cut -d ' ' -f$1 <<< $str)
+}
+
+# $@: function with parameters
 # Calls a function if it exists
 function call_function_if_exists {
     if function_exists? $1; then
         log "# -- $1 --"
-        local params=$@
-        $1 ${params[1]}
+        $@
     else
         log_debug "function \`$1\` undefined"
     fi
 }
 
 # Prints a message to STDOUT, prefixed with the hosts node name.
-#  $@: message
+#  $@: the message
 function log {
     echo "[$(uname -n)] $@"
 }
 
 # calls `log` when `DEBUG` is enabled
+# $@: the message
 function log_debug {
     [ "$DEBUG" == "true" ] && log "DEBUG -- " $@
 }
 
+# Executes function an copies the functions result from `RET` into another variable.
 # $1: global variable to copy the value of the global `RET` variable
-# $2: function to call (function must set `RET` variable)
-# $3-$x: parameters passed to function that is called
+# $2-: function with parameters (function must set the `RET` variable)
 function copy_return {
-    local params=( $@ )
-    log_debug "Copy variable RET to variable $1 after executing \`${params[1]}"
-    $2 ${params[2]}
-    eval "$1=$RET"
+    slice_string 2- $@
+    log_debug "Assign value of \$RET to \$$1 after executing: \`${RET}\`"
+    $RET
+    eval $1=\"$RET\"
 }
 
 # KEEP THE NEWLINE
