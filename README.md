@@ -45,9 +45,28 @@ Executed on the remote host after helper library and module are included.
 Executed on the local host after `run`.
 
 
+## CONTRIBUTE
+
+### CONVENTIONS
+
+* document function parameters
+* write posix compliance functions
+* keep functions small
+* validate / document posix compliance of functions
+
+#### FUNCTION DOCUMENTATION
+
+* description
+* method parameters
+* return value
+* altered global variables
+
 ##  TODO 
 
 * generate a UUID to identify the script execution
 * transfer state from remote execution (simple use a remote file)
 * save method return values/errors in global variables (RETURN/ERRNO)
 * test if remote host is available (helper method for initialize)
+* check/extract CLI arguments using getopt
+* check remote shell compliance
+* generate API documentation (evaluate function documentation)
