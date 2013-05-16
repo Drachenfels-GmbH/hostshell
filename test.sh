@@ -1,4 +1,6 @@
 #!/bin/bash
+# append `-x` to bash command to enable debugging or
+# use `set -x` from withing the script
 
 # $1: the file to load
 function test_require {
@@ -6,33 +8,38 @@ function test_require {
     . $FILE_BASENAME/$1
 }
 
-function run_testcase {
-    local testcase=$1
-    echo; echo "running test function: $1"
-    $testcase
-    echo "  Result: $TEST_RESULT"
+function run_test {
+    echo "* test: $@"
+    $@
+    echo "  result: $TEST_RESULT"
 }
 
-# $1: expected value
-# $2: actual value
-function expect_strings_equal {
-    local expected=$1
-    local actual=$2
-
-    if [ "$expected" == "$actual" ]; then
+# Compares strings stored in variables `EXPECTED` and `ACTUAL`
+function actual_to_match_expected {
+    local condition="[ \"$ACTUAL\" == \"$EXPECTED\" ]"
+    echo "condition: $condition"
+    if eval $condition; then
         TEST_RESULT="success"
     else
-        echo "  MESSAGE: Expected strings to be equal"
-        echo "  EXPECTED: $expected"
-        echo "  ACTUAL:   $actual"
-        TEST_RESULT="fail"
+        echo "  failure: Strings are not equal."
+        TEST_RESULT="failure"
     fi
 }
 
-# TODO collect overall result
+function return_to_match_expected {
+    ACTUAL=$RET
+    actual_to_match_expected
+}
+
+function expect {
+    echo "expect #$@:"
+    $@
+}
+
+# TODO collect overall result and set exit value to 1 on failure
 
 for testfile in $(ls test/test-*.sh); do
-  echo "file: $testfile"
+  echo; echo "file: $testfile"
   echo "-----------------------"
   . $testfile
 done

@@ -2,14 +2,17 @@ DEBUG="true"
 
 test_require 'lib/base.sh'
 
-function hello_world {
+function foobar {
     RET="$@"
 }
 
 function test_copy_return {
-    copy_return 'BLA' hello_world 'hello ' 'world'
-    expect_strings_equal "hello world" $BLA
+    copy_return 'BLA' foobar "hello world"
+
+    EXPECTED='hello world'
+    ACTUAL=$BLA
+    expect 'actual_to_match_expected'
 }
 
-run_testcase test_copy_return
+run_test test_copy_return
 
