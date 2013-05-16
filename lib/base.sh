@@ -37,7 +37,7 @@ function log_debug {
 # $3-$x: parameters passed to function that is called
 function copy_return {
     local params=( $@ )
-    log_debug "Copy RET to $1 for command: ${params[1]}"
+    log_debug "Copy variable RET to variable $1 after executing \`${params[1]}"
     $2 ${params[2]}
     eval "$1=$RET"
 }

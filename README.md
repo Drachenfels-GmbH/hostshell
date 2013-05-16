@@ -76,3 +76,5 @@ Executed on the local host after `run`.
 * check/extract CLI arguments using getopt
 * check remote shell compliance
 * generate API documentation (evaluate function documentation)
+* colorize output if available using `tput` http://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
+* make hosh embeddable into ordinary shell scripts to launch the scripts directly
