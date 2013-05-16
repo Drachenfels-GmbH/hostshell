@@ -1,4 +1,4 @@
-# Defines a variable from heredoc input
+# Defines a variable from heredoc input.
 #  $1: variable name
 function define {
     read -r -d '' ${1} || true
@@ -18,8 +18,8 @@ function slice_string {
   RET=$(cut -d ' ' -f$1 <<< $str)
 }
 
-# $@: function with parameters
 # Calls a function if it exists
+# $@: function with parameters
 function call_function_if_exists {
     if function_exists? $1; then
         log "# -- $1 --"
@@ -35,15 +35,16 @@ function log {
     echo "[$(uname -n)] $@"
 }
 
-# calls `log` when `DEBUG` is enabled
+# Calls `log` when `DEBUG` is enabled.
 # $@: the message
 function log_debug {
     [ "$DEBUG" == "true" ] && log "DEBUG -- " $@
 }
 
 # Executes function an copies the functions result from `RET` into another variable.
-# $1: global variable to copy the value of the global `RET` variable
+# $1: name of the global variable where `RET` from function is copied to
 # $2-: function with parameters (function must set the `RET` variable)
+# $RET: `RET` value of the executed function
 function copy_return {
     slice_string 2- $@
     log_debug "Assign value of \$RET to \$$1 after executing: \`${RET}\`"
