@@ -47,7 +47,8 @@ Executed on the local host after `run`.
 
 ## CONTRIBUTE
 
-### CONVENTIONS
+### LIBRARY CONVENTIONS
+
 
 * document function parameters
 * write posix compliance functions
@@ -60,6 +61,11 @@ Executed on the local host after `run`.
 * method parameters
 * return value
 * altered global variables
+
+#### LIBRARIES
+
+* library file must have a trailing newline (`line xx: syntax error: unexpected end of file`)
+* do not overwrite external commands with functions, add guard to check if command is defined
 
 ##  TODO 
 

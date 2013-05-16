@@ -1,30 +1,34 @@
 #!/bin/bash
+shopt -s expand_aliases # allow aliases
 
-HELPER_FILE="$(dirname $0)/helper.sh"
+HOSH_DIR="$(readlink $0 | xargs dirname)"
+STDLIB_FILES="$(ls $HOSH_DIR/lib/*.sh)"
 MODULE_FILE="$1"
 ARGV=$@
 
-HELPER_CONTENT=`cat ${HELPER_FILE}`
+STDLIB_CONTENT=`cat ${STDLIB_FILES}`
 MODULE_CONTENT=`cat ${MODULE_FILE}`
 
-. $HELPER_FILE
+. $STDLIB_FILES
 . $MODULE_FILE
 
-# call the module's `initialize` function
-log "# -- INITIALIZE --"
-initialize
+type 'initialize'
+
+call_function_if_exists 'initialize'
 
 # call the modules's `run` function on the remote host
+if function_exists? 'run'; then
 ssh $REMOTE <<EOF
-    ${HELPER_CONTENT}
+    ${STDLIB_CONTENT}
     ${MODULE_CONTENT}
-
     ARGV=$ARGV
 
-    log "# -- RUN --"
+    log "# -- run --"
     run
 EOF
+else
+    log_debug 'function `run` undefined'
+fi
 
 # call the module's `post_run` function
-log "# -- POST RUN --"
-post_run
+call_function_if_exists 'post_run'
