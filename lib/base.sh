@@ -7,7 +7,7 @@ function define {
 # Checks if a function exists
 # $1: the function name
 function function_exists? {
-    type $1 | grep -q 'function'
+    type $1 2>/dev/null | grep -q 'function'
 }
 
 # Slices the given string. Uses spaces as separator.
@@ -25,7 +25,7 @@ function call_function_if_exists {
         log "# -- $1 --"
         $@
     else
-        log_debug "function \`$1\` undefined"
+        log "function \`$1\` is undefined"
     fi
 }
 
