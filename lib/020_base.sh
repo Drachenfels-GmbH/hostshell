@@ -32,7 +32,6 @@ function copy_return {
     eval $1=\"$RET\"
 }
 
-
 # $1: the session name
 function run_in_tmux {
     local session=$1
@@ -41,6 +40,28 @@ function run_in_tmux {
     define 'IN'
     tmux attach -t $session 2>/dev/null || tmux new-session -d -s $session -n $window
     tmux send-keys -t${session}:0 \'$code\' C-m
+}
+
+# Create a symlink for a binary
+# $1: the binary
+# $2: the path to the symlink
+function link_binary {
+    local binary_path=$(which $1)
+    if [ -z "$binary_path" ]; then
+        echo "Binary does not exist"
+        return 1
+    fi
+    if [ -e $2 ]; then
+       if [ -L $2 ]  && [ "$(readlink $2)" == "$binary_path" ]; then
+            log_debug "Symlink already exists: $2 -> $binary_path"
+        else
+            log_debug "Failed to create symlink: $2 -> $binary_path"
+        fi
+        return 1
+    else
+        log_debug "Creating symlink: $2 -> $binary_path"
+        ln -s $binary_path $2
+    fi
 }
 
 # KEEP THE NEWLINE
