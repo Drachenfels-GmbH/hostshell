@@ -65,7 +65,14 @@ Executed on the local host after `run`.
 #### LIBRARIES
 
 * library file must have a trailing newline (`line xx: syntax error: unexpected end of file`)
-* do not overwrite external commands with functions, add guard to check if command is defined
+*
+* natural order of library files must reflect dependencies
+* dependent functions should always be declared before using them (although this is not required)
+
+#### NAMING
+
+* external commands must not be overwritten by functions (add guard to check if command is defined)
+* `test_` is the reserved prefix for test functions
 
 ## POSIX COMPLIANCE
 
@@ -73,6 +80,10 @@ really hard stuff
 
 * try bashcritic from https://trac.id.ethz.ch/projects/bashcritic/
 * http://www.spinics.net/lists/dash/msg00537.html
+
+## list functions
+
+`grep -o --no-filename 'function .* {$' lib/* | sort | cut -d ' ' -f2`
 
 ##  TODO 
 

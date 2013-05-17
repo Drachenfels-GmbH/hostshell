@@ -1,3 +1,4 @@
+# TODO prevent SSH host key verification failure !
 # Forces a git repository to be up-to date to its tracked master.
 # The repository is cloned if it does not exist.
 #  $1: remote url
@@ -8,7 +9,6 @@ function git_sync {
 
     log "Syncing repository $remote to $destination"
 
-    cd $destination
     if [ -d $destination ]; then
         cd $destination
         git fetch

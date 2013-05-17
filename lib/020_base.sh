@@ -1,7 +1,7 @@
 # Defines a variable from heredoc input.
 #  $1: variable name
 function define {
-    read -r -d '' ${1} || true
+    read -r -d ';' ${1} || true
 }
 
 # Checks if a function exists
@@ -10,35 +10,15 @@ function function_exists? {
     type $1 2>/dev/null | grep -q 'function'
 }
 
-# Slices the given string. Uses spaces as separator.
-# $1: range (see `man 5 cut`)
-# $2: input string
-function slice_string {
-  local str=$(cut -d ' ' -f2- <<< $@)
-  RET=$(cut -d ' ' -f$1 <<< $str)
-}
-
 # Calls a function if it exists
 # $@: function with parameters
 function call_function_if_exists {
     if function_exists? $1; then
-        log "# -- $1 --"
+        log "-- calling function: $1 --"
         $@
     else
         log "function \`$1\` is undefined"
     fi
-}
-
-# Prints a message to STDOUT, prefixed with the hosts node name.
-#  $@: the message
-function log {
-    echo "[$(uname -n)] $@"
-}
-
-# Calls `log` when `DEBUG` is enabled.
-# $@: the message
-function log_debug {
-    [ "$DEBUG" == "true" ] && log "DEBUG -- " $@
 }
 
 # Executes function an copies the functions result from `RET` into another variable.
@@ -50,6 +30,17 @@ function copy_return {
     log_debug "Assign value of \$RET to \$$1 after executing: \`${RET}\`"
     $RET
     eval $1=\"$RET\"
+}
+
+
+# $1: the session name
+function run_in_tmux {
+    local session=$1
+    local window=$2
+    slice_string 3- $@
+    define 'IN'
+    tmux attach -t $session 2>/dev/null || tmux new-session -d -s $session -n $window
+    tmux send-keys -t${session}:0 \'$code\' C-m
 }
 
 # KEEP THE NEWLINE
