@@ -23,8 +23,7 @@ run_module() {
 ssh $REMOTE <<EOF
     ${stdlib_content}
     ${module_content}
-    ARGV=$ARGV
-
+    ARGV="$ARGV"
     log "# -- run --"
     run
 EOF

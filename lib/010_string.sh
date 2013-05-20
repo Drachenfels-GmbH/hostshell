@@ -2,8 +2,8 @@
 # $1: range (see `man 5 cut`)
 # $2: input string
 slice_string() {
-    local str=$(cut -d ' ' -f2- <<< $@)
-    RET=$(cut -d ' ' -f$1 <<< $str)
+    local str=$(echo $@ | cut -d ' ' -f2- )
+    RET=$(echo $str | cut -d ' ' -f$1)
 }
 # $1 separator
 # $2 the string
@@ -11,7 +11,7 @@ slice_string() {
 # return: the number of words
 word_count() {
      slice_string 1- $@
-     RET=$(tr '/' ' ' <<< $RET | wc -w)
+     RET=$(echo $RET | tr '/' ' ' | wc -w)
      return $RET
 }
 
