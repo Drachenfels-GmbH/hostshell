@@ -11,9 +11,9 @@ HOSH_DIR="$( (readlink $0 || echo $0) | xargs dirname)" # dirname_real
 # $1: file path of the module to run
 run_module() {
     load_stdlib
-    local stdlib_content=`cat ${STDLIB_FILES}`
+    local stdlib_content=`cat ${STDLIB_FILES} | grep -v '^#'`
     local module_file="$1"
-    local module_content=`cat ${module_file}`
+    local module_content=`cat ${module_file} | grep -v '^#'`
     . $module_file
 
     call_function_if_exists 'initialize'
