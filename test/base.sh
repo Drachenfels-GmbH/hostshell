@@ -35,3 +35,7 @@ function expect_true {
 function expect_false {
     expect_condition "! [ $@ ]"
 }
+
+function expect_return {
+    expect_condition "[ "$RET" $@ ]"
+}

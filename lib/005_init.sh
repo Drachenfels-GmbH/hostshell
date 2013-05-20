@@ -2,7 +2,8 @@
 # $1: the path
 # $RET: the dirname of the path
 function dirname_real {
-    (readlink $1 || echo $1) | xargs dirname
+    echo $@
+    RET=`(readlink $1 || echo $1) | xargs dirname`
 }
 
 # Prints a message to STDOUT, prefixed with the hosts node name.
