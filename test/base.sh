@@ -1,24 +1,24 @@
 EXIT_ON_FAILURE=true
 DEBUG=true
 
-function run_test_case {
+run_test_case() {
     echo "* TEST: $@"
     $@ || fail_test_case
     $EXIT_ON_FAILURE && echo "=> success"
 }
 
-function fail_test_case {
+fail_test_case() {
     tput bel
     echo "  Condition failed"
     exit 1
 }
 
-function pending_test_case {
+pending_test_case() {
     echo "  NOT IMPLEMENTED"
 }
 
 # Compares strings stored in variables `EXPECTED` and `ACTUAL`
-function expect_condition {
+expect_condition() {
     local condition="$@"
     echo "testing condition -->" $condition
     if eval $condition; then
@@ -28,14 +28,14 @@ function expect_condition {
     fi
 }
 
-function expect_true {
+expect_true() {
     expect_condition "[ $@ ]"
 }
 
-function expect_false {
+expect_false() {
     expect_condition "! [ $@ ]"
 }
 
-function expect_return {
+expect_return() {
     expect_condition "[ "$RET" $@ ]"
 }

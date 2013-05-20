@@ -3,7 +3,7 @@
 # The repository is cloned if it does not exist.
 #  $1: remote url
 #  $2: destination folder
-function git_sync {
+git_sync() {
     local remote=$1
     local destination=$2
 

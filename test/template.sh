@@ -1,6 +1,6 @@
 DEBUG="true"
 
-function t_my_function {
+t_my_function() {
     TEST_RESULT="fail"
 }
 

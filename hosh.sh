@@ -9,7 +9,7 @@ HOSH_DIR="$( (readlink $0 || echo $0) | xargs dirname)" # dirname_real
 
 # Run a hosh module
 # $1: file path of the module to run
-function run_module {
+run_module() {
     load_stdlib
     local stdlib_content=`cat ${STDLIB_FILES}`
     local module_file="$1"
@@ -38,7 +38,7 @@ EOF
 
 # Run test files
 # $1: the test files to run (GLOB pattern)
-function run_tests {
+run_tests() {
     load_stdlib
     load_file $HOSH_DIR/test/base.sh
     local testfiles="$(ls $1)"

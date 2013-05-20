@@ -1,3 +1,4 @@
-REMOTE="the remote host"
+REMOTE="airstation"
+set -x
 
-function run { echo "Me is $(uname -a)"; }
+run() { echo "Me is $(uname -a)"; }

@@ -1,4 +1,4 @@
-function t_dirname_real {
+t_dirname_real() {
     local suffix=$(date +%s)
     local folder="/tmp/foobar-${suffix}"
     mkdir $folder
@@ -7,15 +7,15 @@ function t_dirname_real {
     expect_return "= /tmp"
 }
 
-function t_log {
+t_log() {
     pending_test_case
 }
 
-function t_log_debug {
+t_log_debug() {
     pending_test_case
 }
 
-function t_default_if_false {
+t_default_if_false() {
     local correct_answer=42
     default_if_false "[ 42 -eq $correct_answer ]" "right"  "wrong"
     expect_true "'$RET' == 'right'"
@@ -24,7 +24,7 @@ function t_default_if_false {
     expect_false "'$RET' == 'right'"
 }
 
-function t_default_if_blank {
+t_default_if_blank() {
     local var1="myvalue"
     local blankvar=""
 
@@ -34,15 +34,15 @@ function t_default_if_blank {
     expect_true "'$RET' == 'default'"
 }
 
-function t_default_if_blank_multi {
+t_default_if_blank_multi() {
     pending_test_case
 }
 
-function t_load_file {
+t_load_file() {
     pending_test_case
 }
 
-function t_load_stdlib {
+t_load_stdlib() {
     pending_test_case
 }
 

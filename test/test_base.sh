@@ -1,12 +1,12 @@
-function my_function {
+my_function() {
     RET="$@"
 }
-function t_call_function_if_exists {
+t_call_function_if_exists() {
     call_function_if_exists my_function 'foo' 'bar' 'baz'
     expect_true "'$RET' == 'foo bar baz'"
 }
 
-function t_copy_return {
+t_copy_return() {
     copy_return 'BLA' my_function "hello world"
     expect_true "'$BLA' == 'hello world'"
 }

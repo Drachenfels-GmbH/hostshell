@@ -1,18 +1,18 @@
 # Defines a variable from heredoc input.
 #  $1: variable name
-function define {
+define() {
     read -r -d ';' ${1} || true
 }
 
 # Checks if a function exists
 # $1: the function name
-function function_exists {
+function_exists() {
     type $1 2>/dev/null | grep -q 'function'
 }
 
 # Calls a function if it exists
 # $@: function with parameters
-function call_function_if_exists {
+call_function_if_exists() {
     if function_exists $1; then
         log "-- calling function: $1 --"
         $@
@@ -25,7 +25,7 @@ function call_function_if_exists {
 # $1: name of the global variable where `RET` from function is copied to
 # $2-: function with parameters (function must set the `RET` variable)
 # $RET: `RET` value of the executed function
-function copy_return {
+copy_return() {
     slice_string 2- $@
     log_debug "Assign value of \$RET to \$$1 after executing: \`${RET}\`"
     $RET
@@ -33,7 +33,7 @@ function copy_return {
 }
 
 # $1: the session name
-function run_in_tmux {
+run_in_tmux() {
     local session=$1
     local window=$2
     slice_string 3- $@
@@ -45,7 +45,7 @@ function run_in_tmux {
 # Create a symlink for a binary
 # $1: the binary
 # $2: the path to the symlink
-function link_binary {
+link_binary() {
     local binary_path=$(which $1)
     if [ -z "$binary_path" ]; then
         echo "Binary does not exist"
