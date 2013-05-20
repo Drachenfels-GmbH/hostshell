@@ -53,7 +53,7 @@ Executed on the local host after `run`.
 * document function parameters
 * write posix compliance functions
 * keep functions small
-* validate / document posix compliance of functions
+* validate / document posix compliant of functions
 
 #### FUNCTION DOCUMENTATION
 
