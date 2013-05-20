@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash --posix
 # append `-x` to bash command to enable debugging or
 # use `set -x` from withing the script
 shopt -s expand_aliases # allow aliases
@@ -19,7 +19,7 @@ function run_module {
     call_function_if_exists 'initialize'
 
     # call the modules's `run` function on the remote host
-    if function_exists? 'run'; then
+    if function_exists 'run'; then
 ssh $REMOTE <<EOF
     ${stdlib_content}
     ${module_content}

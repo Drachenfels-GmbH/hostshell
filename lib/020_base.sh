@@ -6,14 +6,14 @@ function define {
 
 # Checks if a function exists
 # $1: the function name
-function function_exists? {
+function function_exists {
     type $1 2>/dev/null | grep -q 'function'
 }
 
 # Calls a function if it exists
 # $@: function with parameters
 function call_function_if_exists {
-    if function_exists? $1; then
+    if function_exists $1; then
         log "-- calling function: $1 --"
         $@
     else

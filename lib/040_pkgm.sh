@@ -3,7 +3,7 @@
 # Checks if a ruby gem is installed.
 # $1: name of the gem package
 # return: 0 if the package is installed, 1 if not
-function gem_installed? {
+function gem_installed {
     gem list -i $1 > /dev/null
 }
 
