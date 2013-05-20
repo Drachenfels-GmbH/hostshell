@@ -1,9 +1,7 @@
-#!/bin/bash --posix
-# append `-x` to bash command to enable debugging or
-# use `set -x` from withing the script
-shopt -s expand_aliases # allow aliases
+#!/bin/sh
+# use `set -x` to debug the script
 
-ARGV=$@
+ARGV="$@"
 HOSH_DIR="$( (readlink $0 || echo $0) | xargs dirname)" # dirname_real
 . $HOSH_DIR/lib/*_init.sh   # load_file
 
