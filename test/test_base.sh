@@ -6,4 +6,10 @@ function t_call_function_if_exists {
     expect_true "'$RET' == 'foo bar baz'"
 }
 
+function t_copy_return {
+    copy_return 'BLA' my_function "hello world"
+    expect_true "'$BLA' == 'hello world'"
+}
+
+run_test_case t_copy_return
 run_test_case t_call_function_if_exists

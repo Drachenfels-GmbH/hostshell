@@ -3,7 +3,7 @@ DEBUG=true
 
 function run_test_case {
     echo "* TEST: $@"
-    $@
+    $@ || fail_test_case
     $EXIT_ON_FAILURE && echo "=> success"
 }
 
