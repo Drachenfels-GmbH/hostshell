@@ -1,7 +1,7 @@
-REMOTE="the-remote-host-name"
+REMOTE="redmine2"
 
 hello() { echo "Hello I'm $(uname -a)"; }
 
-initialize() { hello; }
-run() { hello; }
-post_run() { hello; }
+before_remote_do() { hello; }
+remote_do() { hello; }
+after_remote_do() { hello; }

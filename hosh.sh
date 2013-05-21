@@ -14,23 +14,23 @@ run_module() {
     local module_content=`cat ${module_file} | grep -v '^#'`
     . $module_file
 
-    call_function_if_exists 'initialize'
+    call_function_if_exists 'before_remote_do'
 
     # call the modules's `run` function on the remote host
-    if function_exists 'run'; then
+    if function_exists 'remote_do'; then
 ssh $REMOTE <<EOF
     ${stdlib_content}
     ${module_content}
     ARGV="$ARGV"
-    log "# -- run --"
-    run
+    log "# -- remote_do --"
+    remote_do
 EOF
     else
-        log_debug 'function `run` undefined'
+        log_debug 'function `remote_do` undefined'
     fi
 
     # call the module's `post_run` function
-    call_function_if_exists 'post_run'
+    call_function_if_exists 'after_remote_do'
 }
 
 # Run test files

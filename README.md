@@ -5,13 +5,13 @@ Guaranteed 100% pure shell.
 The lightweight alternative to puppet, chef ...
 
 <pre>
-REMOTE="the-remote-host-name"
+REMOTE="remotehost"
 
-function hello { echo "Hello I'm $(uname -a)"; }
+hello() { echo "Hello I'm $(uname -a)"; }
 
-function initialize { hello; }
-function run { hello; }
-function post_run { hello; }
+before_remote_do() { hello; }
+remote_do() { hello; }
+after_remote_do() { hello; }
 </pre>
 
 
@@ -32,17 +32,17 @@ To set host specific options use the ssh configuration file `~/.ssh/config`. See
 
 ##  MODULE HOOKS
 
-###  `initialize` 
+###  `before_remote_do`
 
 Executed on the local host after helper library and module are included.
 
-###  `run` 
+###  `remote_do`
 
 Executed on the remote host after helper library and module are included.
 
-###  `post_run` 
+###  `after_remote_do`
 
-Executed on the local host after `run`.
+Executed on the local host after `remote_do`.
 
 
 ## CONTRIBUTE
