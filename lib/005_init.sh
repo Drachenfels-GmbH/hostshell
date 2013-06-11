@@ -12,6 +12,12 @@ log() {
     echo "[$(uname -n)] $@"
 }
 
+# Prints a message to STDOUT, prefixed with the hosts node name.
+#  $@: the message
+log_error() {
+    echo "[$(uname -n)] $@" >&2
+}
+
 # Calls `log` when `DEBUG` is enabled.
 # $@: the message
 log_debug() {
@@ -44,20 +50,47 @@ default_if_blank() {
     default_if_false "[ -n '${1}' ]" "$1" "$2"
 }
 
-# Load a file
-# $1: the filename
-load_file() {
-    echo "Loading $1"
-    . $1
+files_exist() {
+    if [ $# -gt 0 ] && ls $@ >/dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+# Loads files
+# $@: the files to load
+load_files() {
+    for file in $@; do
+        log_debug "Loading $file"
+        . $file
+    done
 }
 
-# Load library files $HOSH_DIR/lib/*.sh
-load_stdlib() {
-    STDLIB_FILES="$(ls $HOSH_DIR/lib/*.sh)"
-    echo "-- Loading library files:"
-    for file in $STDLIB_FILES; do
-        load_file $file
-    done
+# Load stdlib files $HOSH_HOME_LIBDIR/lib/*.sh
+load_libdir() {
+    log_debug 'Loading library files from $HOSH_LIBDIR:'
+    HOSH_LIBDIR_FILES="$(ls $HOSH_LIBDIR/*.sh)"
+    load_files $HOSH_LIBDIR_FILES
+}
+
+# Load userlib files from $HOME/.hosh/lib
+load_home_libdir() {
+    log_debug 'Loading library files from $HOSH_HOME_LIBDIR:'
+    if files_exist $HOSH_HOME_LIBDIR/*.sh; then
+        HOSH_HOME_LIBDIR_FILES="$(ls $HOSH_HOME_LIBDIR/*.sh)"
+        load_files $HOSH_HOME_LIBDIR_FILES
+    fi
+}
+
+# Print content of files to stdout (excluding lines commented with a hash)
+# $@: files to strip and print
+files_content_stripped() {
+    if files_exist $@; then
+        cat $@ 2>/dev/null | grep -v '^\s*#'
+        return 0
+    else
+        return 1
+    fi
 }
 
 # KEEP THE NEWLINE

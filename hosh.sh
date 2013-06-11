@@ -1,27 +1,48 @@
 #!/bin/sh
 # use `set -x` to debug the script
+#set -x # use a flag '-d' to enable debuggin
 
-ARGV="$@"
-HOSH_DIR="$( (readlink $0 || echo $0) | xargs dirname)" # dirname_real
-. $HOSH_DIR/lib/*_init.sh   # load_file
+# setup the environment
+export HOSH_ARGV="${HOSH_ARGV:-$@}"
+export HOSH_DIR="${HOSH_DIR:-$( (readlink $0 || echo $0) | xargs dirname)}" # dirname_real
+export HOSH_LIBDIR="${HOSH_LIBDIR:-$HOSH_DIR/lib}"
+export HOSH_HOME="${HOSH_HOME:-$HOME/.hosh}"
+export HOSH_HOME_LIBDIR="${HOSH_HOME_LIBDIR:-$HOSH_HOME/lib}"
+export HOSH_HOME_MODULES="${HOSH_HOME_MODULES:-$HOSH_HOME/modules}"
+
+. $HOSH_LIBDIR/*_init.sh
+log_debug "Environment"
+env | grep HOSH
 
 # Run a hosh module
 # $1: file path of the module to run
 run_module() {
-    load_stdlib
-    local stdlib_content=`cat ${STDLIB_FILES} | grep -v '^#'`
+
+    local libdir_content=`files_content_stripped  $HOSH_LIBDIR_FILES`
+    local home_libdir_content=`files_content_stripped $HOSH_HOME_LIBDIR_FILES`
+
     local module_file="$1"
-    local module_content=`cat ${module_file} | grep -v '^#'`
+    local module_content=`files_content_stripped $module_file`
+
+    echo $1
     . $module_file
 
     call_function_if_exists 'before_remote_do'
 
     # call the modules's `run` function on the remote host
     if function_exists 'remote_do'; then
+    REMOTE=${REMOTE:-$HOSH_REMOTE}
+    if [ -z "$REMOTE" ]; then
+        log_error 'Remote host is undefined. Use $HOSH_REMOTE environment variable.'
+        exit 1
+    fi
+log_debug "CONNECT to $REMOTE"
 ssh $REMOTE <<EOF
-    ${stdlib_content}
+    ARGV="$HOSH_ARGV"
+    ${libdir_content}
+    log_debug "CONNECTED to $REMOTE"
+    ${home_libdir_content}
     ${module_content}
-    ARGV="$ARGV"
     log "# -- remote_do --"
     remote_do
 EOF
@@ -36,8 +57,8 @@ EOF
 # Run test files
 # $1: the test files to run (GLOB pattern)
 run_tests() {
-    load_stdlib
-    load_file $HOSH_DIR/test/base.sh
+    load_libdir
+    load_files $HOSH_DIR/test/base.sh
     local testfiles="$(ls $1)"
     echo "-- test files:"
     echo "$testfiles"
@@ -54,8 +75,18 @@ case "$1" in
         default_if_blank "${2}" "$HOSH_DIR/test/test_*.sh"
         run_tests "$RET"
     ;;
-    module)
-        run_module $2
+    module|mod)
+        case "$2" in
+            /*)
+                load_libdir
+                run_module $2
+            ;;
+            *)
+                load_libdir
+                load_home_libdir
+                run_module $HOSH_HOME_MODULES/$2
+            ;;
+        esac
     ;;
     *)
         echo "No such command: \`$@\`" >&2

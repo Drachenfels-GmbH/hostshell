@@ -32,16 +32,6 @@ copy_return() {
     eval $1=\"$RET\"
 }
 
-# $1: the session name
-run_in_tmux() {
-    local session=$1
-    local window=$2
-    slice_string 3- $@
-    define 'IN'
-    tmux attach -t $session 2>/dev/null || tmux new-session -d -s $session -n $window
-    tmux send-keys -t${session}:0 \'$code\' C-m
-}
-
 # Create a symlink for a binary
 # $1: the binary
 # $2: the path to the symlink

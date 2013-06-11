@@ -96,3 +96,5 @@ really hard stuff
 * generate API documentation (evaluate function documentation)
 * colorize output if available using `tput` http://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 * make hosh embeddable into ordinary shell scripts to launch the scripts directly
+* don't use global variables: http://www.linuxjournal.com/content/return-values-bash-functions
+* source scripts in local hosh folder $HOME/.hosh
