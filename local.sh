@@ -2,10 +2,10 @@ before_remote_do() {
     `slice_string 2- $HOSH_ARGV`
 }
 
-# View/Search/Modify a hosh method. Displays a select menu if more
-# than one function was found for the given search expression (grep simple expression)
-# $1: the name/part of the method name to search
-help() {
+# View/Search/Modify a method. Displays a select menu if more
+# than one method was found for the given search expression (simple grep expression).
+# $1: the expression that matches the method name to search.
+hosh_help() {
     local library_files=`ls $HOSH_HOME_LIBDIR/*.sh $HOSH_LIBDIR/*.sh`
     local locations=`grep -n ".*$1.*() \+{" $library_files | cut -d'{' -f 1`
     location=`select_item $locations`

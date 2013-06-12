@@ -99,7 +99,7 @@ case "$1" in
     ;;
     help|h)
         load_libdir
-        HOSH_ARGV="h help `slice_string 2- $HOSH_ARGV`"
+        HOSH_ARGV="l hosh_help `slice_string 2- $HOSH_ARGV`"
         run_module $HOSH_DIR/local.sh
     ;;
     *)
