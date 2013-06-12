@@ -24,8 +24,7 @@ run_module() {
     local module_file="$1"
     local module_content=`files_content_stripped $module_file`
 
-    echo $1
-    . $module_file
+    [ -z $module_file ] || . $module_file
 
     call_function_if_exists 'before_remote_do'
 
@@ -38,7 +37,7 @@ run_module() {
     fi
 log_debug "CONNECT to $REMOTE"
 ssh $REMOTE <<EOF
-    ARGV="$HOSH_ARGV"
+    HOSH_ARGV="$HOSH_ARGV"
     ${libdir_content}
     log_debug "CONNECTED to $REMOTE"
     ${home_libdir_content}
@@ -47,7 +46,7 @@ ssh $REMOTE <<EOF
     remote_do
 EOF
     else
-        log_debug 'function `remote_do` undefined'
+        log_debug 'function `remote_do` is undefined'
     fi
 
     # call the module's `post_run` function
@@ -71,11 +70,11 @@ run_tests() {
 }
 
 case "$1" in
-    test)
+    test|t)
         default_if_blank "${2}" "$HOSH_DIR/test/test_*.sh"
         run_tests "$RET"
     ;;
-    module|mod)
+    module|mod|m)
         case "$2" in
             /*)
                 load_libdir
@@ -87,6 +86,21 @@ case "$1" in
                 run_module $HOSH_HOME_MODULES/$2
             ;;
         esac
+    ;;
+    local|l)
+        load_libdir
+        load_home_libdir
+        run_module $HOSH_DIR/local.sh
+    ;;
+    remote|r)
+        load_libdir
+        load_home_libdir
+        run_module $HOSH_DIR/remote.sh
+    ;;
+    help|h)
+        load_libdir
+        HOSH_ARGV="h help `slice_string 2- $HOSH_ARGV`"
+        run_module $HOSH_DIR/local.sh
     ;;
     *)
         echo "No such command: \`$@\`" >&2

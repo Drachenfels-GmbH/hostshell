@@ -4,6 +4,7 @@
 slice_string() {
     local str=$(echo $@ | cut -d ' ' -f2- )
     RET=$(echo $str | cut -d ' ' -f$1)
+    echo $RET
 }
 # $1 separator
 # $2 the string

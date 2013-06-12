@@ -81,20 +81,23 @@ really hard stuff
 * try bashcritic from https://trac.id.ethz.ch/projects/bashcritic/
 * http://www.spinics.net/lists/dash/msg00537.html
 
-## list functions
+## list all methods
 
 `grep -o --no-filename 'function .* {$' lib/* | sort | cut -d ' ' -f2`
 
 ##  TODO 
 
-* generate a UUID to identify the script execution
 * transfer state from remote execution (simple use a remote file)
 * save method return values/errors in global variables (RETURN/ERRNO)
 * test if remote host is available (helper method for initialize)
 * check/extract CLI arguments using getopt
-* check remote shell compliance
-* generate API documentation (evaluate function documentation)
+* test remote shell compliance
+* generate nice looking API documentation in markup (evaluate function documentation)
 * colorize output if available using `tput` http://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 * make hosh embeddable into ordinary shell scripts to launch the scripts directly
 * don't use global variables: http://www.linuxjournal.com/content/return-values-bash-functions
-* source scripts in local hosh folder $HOME/.hosh
+
+## IDEAS
+
+* generate a UUID to identify the script execution ?
+* add bash completion for functions ?
